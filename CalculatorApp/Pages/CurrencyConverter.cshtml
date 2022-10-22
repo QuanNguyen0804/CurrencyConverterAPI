@@ -1,0 +1,55 @@
+﻿@page
+@model CalculatorApp.Pages.CalculatorModel
+@{
+    ViewData["Title"] = "CurrencyConverter";
+}
+
+<div class="row justify-content-sm-center">
+    <h2>Currency Converter</h2>
+    <form class="form-convert col-sm-6 m-auto" onsubmit="convert(event)">
+        <div class="row">
+            <label class="col-sm-2 col-form-label col-form-label-sm">Số tiền</label>
+            <div class="col-sm-10">
+                <input class="form-control form-control-sm" type="number" id="txtA" step="any" min="0" required /> <br />
+            </div>
+        </div>
+        <div class="row">
+            <label class="col-sm-2 col-form-label col-form-label-sm">Tỷ giá</label>
+            <div class="col-sm-10">
+                <input class="form-control form-control-sm" type="number" id="txtB" step="any" min="0" required /> <br />
+            </div>
+        </div>
+        <div class="row">
+            <input class="col-sm-4" type="submit" value="Convert" /> <br />
+        </div>
+        <div class="row">
+            <input class="col-sm-10" type="text" id="res" readonly />
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    function convert(event) {
+        var apiUrl = 'https://localhost:44383/api/CurrencyConverter/convert/{1}/{2}';
+
+        var a = document.getElementById("txtA").value;
+        var b = document.getElementById("txtB").value;
+        var res = document.getElementById("res");
+
+        apiUrl = apiUrl.replace("{1}", a).replace("{2}", b);
+
+        fetch(apiUrl).then(response => {
+            return response.json();
+        }).then(data => {
+            // Work with JSON data here
+            console.log(data);
+            res.value = data;
+        }).catch(err => {
+            // Do something for an error here
+            alert(err);
+        });
+
+        event.preventDefault();
+    }
+
+</script>
